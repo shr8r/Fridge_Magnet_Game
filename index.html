@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fridge Magnet Words</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --wall:#b9e2da; --wall-line:#a3d2c9; --floor:#c98f5a; --panel:#fffaf0; --panel-line:#e4d3b3; --ink:#27425a;
+  --W:min(54vw,58vh,600px);      /* fridge width */
+  --s:calc(var(--W)/11.5);        /* magnet size: 11 letters fit across */
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--wall:#2d5650;--wall-line:#274b45;--floor:#7a5232;--panel:#2b3440;--panel-line:#46526a;--ink:#f1f5f9}
+}
+:root[data-theme="dark"]{--wall:#2d5650;--wall-line:#274b45;--floor:#7a5232;--panel:#2b3440;--panel-line:#46526a;--ink:#f1f5f9}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+  font-family:"Fredoka","Baloo 2","Trebuchet MS",system-ui,sans-serif;color:var(--ink);
+  background:
+    linear-gradient(var(--wall-line) 2px,transparent 2px) 0 0/56px 56px,
+    linear-gradient(90deg,var(--wall-line) 2px,transparent 2px) 0 0/56px 56px,
+    var(--wall);
+  display:flex;align-items:center;justify-content:space-evenly;gap:2vw;padding:2vh 2vw 4vh;overflow:hidden;
+  user-select:none;-webkit-user-select:none;
+}
+body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:3.2vh;background:var(--floor);box-shadow:inset 0 4px 0 rgba(0,0,0,.18);z-index:0}
+
+/* ---------- fridge ---------- */
+.fridge-wrap{position:relative;z-index:1;flex:none}
+.fridge{
+  position:relative;width:var(--W);aspect-ratio:1/1.6;border-radius:calc(var(--W)*.05);
+  background:
+    repeating-linear-gradient(90deg,rgba(255,255,255,.22) 0 1px,rgba(0,0,0,.05) 1px 3px),
+    linear-gradient(135deg,#dfe3e7,#aab2ba 38%,#eceff1 55%,#98a1aa);
+  box-shadow:0 0 0 3px #7f8891,0 18px 30px rgba(0,0,0,.35),inset 0 0 0 4px rgba(255,255,255,.35);
+  touch-action:none;
+}
+.door{position:absolute;left:3%;right:3%;border-radius:calc(var(--W)*.03);
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.4),inset 0 -3px 8px rgba(0,0,0,.12)}
+.freezer{top:2.5%;height:33%}
+.main{top:37.5%;bottom:2.5%}
+.door::before{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 2px #8b949d}
+.handle{position:absolute;right:5%;width:3.2%;border-radius:99px;
+  background:linear-gradient(90deg,#8d959d,#f4f6f7 45%,#7d858d);box-shadow:2px 3px 5px rgba(0,0,0,.35)}
+.freezer .handle{bottom:9%;height:42%}
+.main .handle{top:7%;height:36%}
+.plate{position:absolute;left:50%;top:35.4%;transform:translateX(-50%);font-size:calc(var(--W)*.02);font-weight:700;
+  letter-spacing:.2em;color:#6d757d;text-shadow:0 1px 0 rgba(255,255,255,.7)}
+.feet{position:absolute;left:8%;right:8%;bottom:-2.2%;height:2.4%;display:flex;justify-content:space-between}
+.feet i{width:9%;background:#4b535b;border-radius:0 0 8px 8px}
+
+/* ---------- magnets ---------- */
+.magnet{
+  position:relative;width:var(--s);height:var(--s);display:grid;place-items:center;flex:none;
+  font-weight:700;font-size:calc(var(--s)*.74);line-height:1;color:#fff;
+  background:var(--c);border-radius:16%;transform:rotate(var(--r,0deg));cursor:grab;touch-action:none;
+  text-shadow:0 0 2px rgba(0,0,0,.4),0 2px 0 rgba(0,0,0,.22);
+  box-shadow:0 3px 0 rgba(0,0,0,.28),0 6px 9px rgba(0,0,0,.3),inset 0 2px 0 rgba(255,255,255,.5),inset 0 -3px 0 rgba(0,0,0,.2);
+}
+.magnet::after{content:"";position:absolute;left:12%;top:8%;width:46%;height:22%;border-radius:99px;background:rgba(255,255,255,.35);transform:rotate(-12deg)}
+body.lower .magnet span{text-transform:lowercase}
+.fridge .magnet{position:absolute}
+.tray .magnet:hover{transform:rotate(var(--r,0deg)) translateY(-3px)}
+.magnet.dragging{position:fixed;z-index:50;cursor:grabbing;pointer-events:none;
+  transform:rotate(var(--r,0deg)) scale(1.12);box-shadow:0 10px 0 rgba(0,0,0,.15),0 18px 22px rgba(0,0,0,.35),inset 0 2px 0 rgba(255,255,255,.5)}
+
+/* ---------- right side ---------- */
+.side{position:relative;z-index:1;flex:1;max-width:760px;min-width:0;display:flex;flex-direction:column;gap:2.2vh;align-items:center}
+h1{margin:0;font-size:clamp(1.4rem,3.2vw,2.6rem);text-align:center}
+.hint{margin:0;font-size:clamp(.9rem,1.5vw,1.15rem);text-align:center;opacity:.85}
+.toggle{display:inline-flex;background:var(--panel);border:3px solid var(--panel-line);border-radius:99px;padding:4px;gap:4px}
+.toggle button{font:inherit;font-weight:700;font-size:clamp(1rem,1.8vw,1.4rem);color:var(--ink);background:none;border:0;border-radius:99px;padding:.3em 1em;cursor:pointer}
+.toggle button[aria-pressed="true"]{background:#1d7be0;color:#fff}
+.toggle button:focus-visible,.clear:focus-visible,.dialog button:focus-visible{outline:3px solid #f59e0b;outline-offset:2px}
+.tray{width:100%;display:flex;flex-wrap:wrap;justify-content:center;gap:calc(var(--s)*.28);padding:calc(var(--s)*.4);
+  background:var(--panel);border:4px solid var(--panel-line);border-radius:24px;box-shadow:0 8px 0 rgba(0,0,0,.14)}
+
+/* ---------- clear button + dialog ---------- */
+.clear{position:fixed;right:max(10px,env(safe-area-inset-right,0px));bottom:calc(3.2vh + 8px);z-index:2;font:inherit;font-size:.8rem;
+  color:var(--ink);background:var(--panel);border:2px solid var(--panel-line);border-radius:99px;padding:.3em .8em;opacity:.7;cursor:pointer}
+.clear:hover{opacity:1}
+.overlay{position:fixed;inset:0;z-index:100;display:none;place-items:center;background:rgba(15,25,40,.55)}
+.overlay.open{display:grid}
+.dialog{width:min(90vw,420px);background:var(--panel);color:var(--ink);border:4px solid var(--panel-line);border-radius:24px;padding:1.4rem;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,.4)}
+.dialog h2{margin:0 0 .4rem;font-size:1.6rem}
+.dialog p{margin:0 0 1.2rem;font-size:1.1rem}
+.dialog .row{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap}
+.dialog button{font:inherit;font-weight:700;font-size:1.1rem;border:0;border-radius:99px;padding:.6em 1.2em;cursor:pointer}
+.keep{background:#2a9d3f;color:#fff}
+.yes{background:#e8e3d8;color:#27425a}
+</style>
+</head>
+<body>
+<div class="fridge-wrap">
+  <div class="fridge" id="fridge" aria-label="Fridge. Drop letters here.">
+    <div class="door freezer"><div class="handle"></div></div>
+    <div class="plate">FROSTY</div>
+    <div class="door main"><div class="handle"></div></div>
+    <div class="feet"><i></i><i></i></div>
+  </div>
+</div>
+
+<main class="side">
+  <h1>Spell a word!</h1>
+  <p class="hint">Drag letters onto the fridge. Drag one off the fridge to put it away.</p>
+  <div class="toggle" role="group" aria-label="Letter case">
+    <button type="button" id="upper" aria-pressed="true">ABC</button>
+    <button type="button" id="lower" aria-pressed="false">abc</button>
+  </div>
+  <div class="tray" id="tray"></div>
+</main>
+
+<button class="clear" id="clear" type="button">Clear fridge</button>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="dt">
+  <div class="dialog">
+    <h2 id="dt">Clear the fridge?</h2>
+    <p>All the letters on the fridge will be put away.</p>
+    <div class="row">
+      <button class="keep" id="keep" type="button">Keep playing</button>
+      <button class="yes" id="yes" type="button">Yes, clear it</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const COLORS=["#e63946","#f08a00","#e0a100","#2a9d3f","#1d7be0","#8a4fd6","#e84a9b","#0fa3a3"];
+const fridge=document.getElementById("fridge"), tray=document.getElementById("tray");
+
+function makeMagnet(ch,i){
+  const el=document.createElement("div");
+  el.className="magnet";
+  el.dataset.ch=ch; el.dataset.i=i;
+  el.style.setProperty("--c",COLORS[i%COLORS.length]);
+  el.style.setProperty("--r",((Math.random()*10)-5).toFixed(1)+"deg");
+  const s=document.createElement("span"); s.textContent=ch; el.appendChild(s);
+  return el;
+}
+
+"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach((ch,i)=>{
+  const m=makeMagnet(ch,i); m.dataset.tray="1"; tray.appendChild(m);
+});
+
+/* ---- dragging ---- */
+function startDrag(e,el){
+  e.preventDefault();
+  const size=el.offsetWidth;
+  const fromFridge=el.parentElement===fridge;
+  const rect=el.getBoundingClientRect();
+  document.body.appendChild(el);
+  el.classList.add("dragging");
+  el.style.left=rect.left+"px"; el.style.top=rect.top+"px";
+  el.style.width=el.style.height=size+"px";
+  const move=ev=>{el.style.left=(ev.clientX-size/2)+"px"; el.style.top=(ev.clientY-size/2)+"px";};
+  const end=ev=>{
+    window.removeEventListener("pointermove",move);
+    window.removeEventListener("pointerup",end);
+    window.removeEventListener("pointercancel",end);
+    const f=fridge.getBoundingClientRect();
+    const cx=ev.clientX,cy=ev.clientY;
+    if(cx>f.left&&cx<f.right&&cy>f.top&&cy<f.bottom){
+      let x=(cx-size/2-f.left)/f.width, y=(cy-size/2-f.top)/f.height;
+      x=Math.min(Math.max(x,0),1-size/f.width); y=Math.min(Math.max(y,0),1-size/f.height);
+      el.classList.remove("dragging");
+      el.style.cssText=el.style.cssText.replace(/(left|top|width|height):[^;]+;?/g,"");
+      el.style.left=(x*100)+"%"; el.style.top=(y*100)+"%";
+      fridge.appendChild(el);
+    } else { el.remove(); }
+  };
+  window.addEventListener("pointermove",move);
+  window.addEventListener("pointerup",end);
+  window.addEventListener("pointercancel",end);
+  move(e);
+}
+
+tray.addEventListener("pointerdown",e=>{
+  const src=e.target.closest(".magnet"); if(!src) return;
+  const copy=makeMagnet(src.dataset.ch,+src.dataset.i);
+  copy.style.setProperty("--r",src.style.getPropertyValue("--r"));
+  document.body.appendChild(copy); /* must be in the page so its size can be measured */
+  startDrag(e,copy);
+});
+fridge.addEventListener("pointerdown",e=>{
+  const el=e.target.closest(".magnet"); if(el) startDrag(e,el);
+});
+
+/* ---- upper / lowercase ---- */
+const upper=document.getElementById("upper"), lower=document.getElementById("lower");
+function setCase(isLower){
+  document.body.classList.toggle("lower",isLower);
+  lower.setAttribute("aria-pressed",isLower); upper.setAttribute("aria-pressed",!isLower);
+}
+upper.onclick=()=>setCase(false); lower.onclick=()=>setCase(true);
+
+/* ---- clear with confirmation ---- */
+const overlay=document.getElementById("overlay");
+const openDlg=()=>{overlay.classList.add("open"); document.getElementById("keep").focus();};
+const closeDlg=()=>overlay.classList.remove("open");
+document.getElementById("clear").onclick=openDlg;
+document.getElementById("keep").onclick=closeDlg;
+document.getElementById("yes").onclick=()=>{fridge.querySelectorAll(".magnet").forEach(m=>m.remove()); closeDlg();};
+overlay.addEventListener("pointerdown",e=>{if(e.target===overlay) closeDlg();});
+window.addEventListener("keydown",e=>{if(e.key==="Escape") closeDlg();});
+</script>
+</body>
+</html>
